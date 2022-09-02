@@ -45,7 +45,7 @@ export const App: FunctionComponent = () => {
 		}
 
 		setResult(newResult);
-		setDisplay(newResult.toString().toString().slice(0, 12));
+		setDisplay(newResult.toString().toString().slice(0, 11));
 
 		return true;
 	};
@@ -54,7 +54,7 @@ export const App: FunctionComponent = () => {
 	const onDigitButtonClick = (digit: Digit) => {
 		let newDisplay = display;
 
-		if ((display === "0" && digit === 0) || display.length > 12) {
+		if ((display === "0" && digit === 0) || display.length > 11) {
 			return;
 		}
 
