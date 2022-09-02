@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import styled from 'styled-components'
+import { useState } from 'react';
+import styled from 'styled-components';
+import Delete from '../icon/delete.png';
 
 
 const Calculate = () => {
@@ -21,7 +22,7 @@ const Calculate = () => {
         case '+' :
         case '-' :
           return 1;
-        case '*' :
+        case '×' :
         case '/' :
           return 2;
       }
@@ -34,7 +35,7 @@ const Calculate = () => {
       case '(' :
         stack.push(char);
         break;
-      case '+' : case '-' : case '*' : case '/' :
+      case '+' : case '-' : case '×' : case '/' :
         // 스택이 비어있지 않는경우 현재의 연산자와 top의 우선순위를 비교
         while(stack[stack.length-1]!=null &&
           (prec(char) <= prec(stack[stack.length-1]))) {
@@ -92,7 +93,7 @@ const Calculate = () => {
         case '-':
             stack.push(a-b);
             break;
-        case '*':
+        case '×':
             stack.push(a*b);
             break;
         case '/':
@@ -109,7 +110,7 @@ const Calculate = () => {
   return stack
   }
 
-  const numb = ['C', '()', '%', '/', 7, 8, 9, '*', 4, 5, 6, '-', 1, 2, 3, '+', '+/-', 0, '.', '=']
+  const numb = ['C', '()', '%', '/', 7, 8, 9, '×', 4, 5, 6, '-', 1, 2, 3, '+', '+/-', 0, '.', '=']
   const [list, setlist] = useState('')
   const [check, setCheck] = useState(0)
   const erasehandler = () => {
@@ -142,20 +143,39 @@ const Calculate = () => {
   }
 
   return(
-    <>
+    <BackgroundContainer>
       <CalculateContainer>{list}</CalculateContainer>
-      <EraseButton onClick={erasehandler}>←</EraseButton>
-      <br/>
+      <Container>
+        <EraseBtnContainer onClick={erasehandler}>
+          <EraseButton src={Delete} />
+        </EraseBtnContainer>
+      </Container>
+      <BoundaryLine />
       <ButtonContainer>
         {numb.map((el) => {
-          return(
-            <div key={el}>
-              <Button onClick={() => {buttonHandler(el)}}>{el}</Button>
-            </div>
-          )
+          if(typeof(el) === 'number' || el === '.' || el === '+/-'){
+            return(
+              <div key={el}>
+                <Button onClick={() => {buttonHandler(el)}}>{el}</Button>
+              </div>
+            )
+          }else if(el === '='){
+            return(
+              <div key={el}>
+                <Button style={{background: "rgba(252, 81, 133, 1)", color: "white"}} onClick={() => {buttonHandler(el)}}>{el}</Button>
+              </div>
+            )
+          }else{
+            return(
+              <div key={el}>
+                <Button style={{color: "rgba(252, 81, 133, 1)"}}onClick={() => {buttonHandler(el)}}>{el}</Button>
+              </div>
+            )
+          }
+          
         })}
       </ButtonContainer>
-    </>
+    </BackgroundContainer>
   )
 }
 
@@ -163,41 +183,84 @@ const Calculate = () => {
 
 export default Calculate;
 
-
+const BackgroundContainer = styled.div`
+  width: 360px;
+  height: 800px;
+  border: 1px solid gray;
+  margin-left: auto;
+  margin-right: auto;
+`;
 
 const CalculateContainer = styled.div`
   display: block;
-  width: 40vw;
-  height: 30vh;
+  width: 330px;
+  height: 211px;
+  margin-top: 77px;
   text-align: right;
-  border: 1px solid;
+  border: 1px solid rgba(245, 245, 245, 1);
   font-size: 3rem;
+  margin-left: auto;
+  margin-right: auto;
 `
-
-const EraseButton = styled.button`
-  width: 9vw;
-  height: 9vh;
+const Container = styled.div`
+  width: 330px;
+  height: 62px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
+  align-items: center;
   justify-content: center;
+`;
+
+const EraseBtnContainer = styled.div`
+  width: 75px;
+  height: 62px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+const EraseButton = styled.img`
+  width: 32px;
+  height: 32px;
   font-size: 3rem;
-  margin-left: 30vw;
-`
+  margin-left: auto;
+  margin-right: 21.5px;
+`;
+
+const BoundaryLine = styled.h1`
+    width: 330px;
+    font-size: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid gray;
+`;
 
 const ButtonContainer = styled.div`
-  width: 40vw;
-  height: 55vh;
+  width: 330px;
+  height: 358px;
+  margin-left: auto;
+  margin-right: auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+`;
 
-`
-
-const Button = styled.button`
-  width: 5vw;
-  height: 3vh;
+const Button = styled.div`
+  width: 75px;
+  height: 62px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-`
+  font-size: 32px;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: rgba(245, 245, 245, 1);
+  @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+  font-family: 'Noto Sans KR', sans-serif;
+`;
 
 
